@@ -17,6 +17,7 @@ public class CustomView extends View {
     private ArrayList<Float> vals;
     private int xIncr;
     private int yVal;
+    private SensorType type;
 
     public ArrayList<Float> getVals(){
         return vals;
@@ -29,6 +30,17 @@ public class CustomView extends View {
     public int getyVal(){
         return yVal;
     }
+
+    public CustomView(Context context, SensorType type){
+        super(context);
+        vals = new ArrayList<Float>(10);
+        if(type == SensorType.LIGHT){
+            this.type = SensorType.LIGHT;
+        } else{
+            this.type = SensorType.ACCELEROMETER;
+        }
+    }
+
     public CustomView(Context context) {
         super(context);
         vals = new ArrayList<Float>(10);

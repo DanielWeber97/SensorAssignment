@@ -7,16 +7,21 @@
     tools:context=".MainActivity"
     android:orientation="vertical">
 
-    <com.example.sensorassignment.CustomView
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:id="@+id/plot"
-        android:background="#CCCCCC"/>
-
     <Button
+        android:id="@+id/acc"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:id="@+id/button"
-        android:onClick="home"/>
+        android:text="Accelerometer"
+        android:onClick="toAccelerometer"/>
+
+
+    <Button
+        android:id="@+id/light"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Light Sensor"
+        android:onClick="toLight"/>
+
+
 
 </LinearLayout>

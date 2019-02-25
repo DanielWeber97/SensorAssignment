@@ -13,10 +13,6 @@
         android:id="@+id/plot"
         android:background="#CCCCCC"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:id="@+id/button"
-        android:onClick="foo"/>
+
 
 </LinearLayout>
