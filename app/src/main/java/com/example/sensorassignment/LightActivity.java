@@ -38,23 +38,26 @@ public class LightActivity extends AppCompatActivity implements SensorEventListe
         //plot = findViewById(R.id.plot);
         plot = new CustomView(this, SensorType.LIGHT);
 
-        plot.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, 1000));
-        LinearLayout l = findViewById(R.id.linearLayout);
+        LinearLayout.LayoutParams plotParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1000);
+        plotParams.setMargins(0,0,0,0);
+        plot.setLayoutParams(plotParams);
+
         b = new Button(this);
-        b.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                140));
-        img = new ImageView(this);
-        img.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                450));
-        img.setBackgroundResource(R.drawable.lightbulb);
+        b.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 140));
         b.setText("Go Home");
         b.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 goHome(v);
             }
         });
+
+        img = new ImageView(this);
+        LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 450);
+        img.setLayoutParams(imgParams);
+        img.setBackgroundResource(R.drawable.lightbulb);
+
+
+        LinearLayout l = findViewById(R.id.linearLayout);
         l.addView(plot);
         l.addView(img);
         l.addView(b);
@@ -95,7 +98,7 @@ public class LightActivity extends AppCompatActivity implements SensorEventListe
 
     public void goHome(View v) {
         run = false;
-        Intent toHome = new Intent(this,MainActivity.class);
+        Intent toHome = new Intent(this, MainActivity.class);
         startActivity(toHome);
 
     }
@@ -116,31 +119,31 @@ public class LightActivity extends AppCompatActivity implements SensorEventListe
 
     }
 
-    public void changeImage(int val){
-        if (val <= 400){
+    public void changeImage(int val) {
+        if (val <= 400) {
             img.setBackgroundResource(R.drawable.lightbulb);
-        } else if (val <= 1000){
+        } else if (val <= 1000) {
             img.setBackgroundResource(R.drawable.lightbulbone);
 
-        }else if (val <= 2000){
+        } else if (val <= 2000) {
             img.setBackgroundResource(R.drawable.lightbulbtwo);
 
-        }else if (val <= 3000){
+        } else if (val <= 3000) {
             img.setBackgroundResource(R.drawable.lightbulbthree);
 
-        }else if (val <= 4000){
+        } else if (val <= 4000) {
             img.setBackgroundResource(R.drawable.lightbulbfour);
 
-        }else if (val <= 6000){
+        } else if (val <= 6000) {
             img.setBackgroundResource(R.drawable.lightbulbfive);
 
-        }else if (val <= 8000){
+        } else if (val <= 8000) {
             img.setBackgroundResource(R.drawable.lightbulbsix);
 
-        }else if (val <= 10000){
+        } else if (val <= 10000) {
             img.setBackgroundResource(R.drawable.lightbulbseven);
 
-        }else if (val <= 30000){
+        } else if (val <= 30000) {
             img.setBackgroundResource(R.drawable.lightbulbeight);
 
         }

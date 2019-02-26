@@ -19,10 +19,8 @@
         <!--android:layout_height="30dp"-->
         <!--android:id="@+id/home"-->
         <!--android:onClick="goHome"/>-->
-    
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="30dp" />
+
+
 
 
 
