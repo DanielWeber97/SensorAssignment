@@ -19,6 +19,7 @@ public class CustomView extends View {
     private int xIncr;
     private int yVal;
     private SensorType type;
+    private int time =0;
 
     public ArrayList<Float> getVals(){
         return vals;
@@ -98,6 +99,7 @@ public class CustomView extends View {
         stdev.setStrokeWidth(10);
 
         drawYAxis(canvas);
+        drawXAxis(canvas);
 
 
 
@@ -119,6 +121,12 @@ public class CustomView extends View {
         }
 
         drawLines(canvas, value,mean,stdev);
+
+
+
+
+
+
     }
 
     public void clear(){
@@ -142,7 +150,6 @@ public class CustomView extends View {
                 canvas.drawLine(i * xIncr + 20, ycoord(vals.get(i)), (i + 1) * xIncr + 20, ycoord(vals.get(i+1)), value);
                 canvas.drawLine(i * xIncr + 20, ycoord(means.get(i)), (i + 1) * xIncr + 20, ycoord(means.get(i+1)), mean);
                 canvas.drawLine(i * xIncr + 20, ycoord(stdevs.get(i)), (i + 1) * xIncr + 20, ycoord(stdevs.get(i+1)), stdev);
-
             }
         }
     }
@@ -210,7 +217,14 @@ public class CustomView extends View {
     }
 
     public Float ycoord(Float f){
-        return this.getHeight()- (f* (this.getHeight()/findMax(vals,means)));
+      //  return this.getHeight()- (f* (this.getHeight()/findMax(vals,means)));
+        int maxVal;
+        if(type == SensorType.LIGHT){
+            maxVal = 30000;
+        } else{
+            maxVal = 78;
+        }
+        return this.getHeight()-((f/maxVal) * this.getHeight());
     }
 
     public void drawYAxis(Canvas canvas){
@@ -231,6 +245,16 @@ public class CustomView extends View {
             canvas.drawText(text,0,(float)(10-i)*(this.getHeight()/10),p);
             Log.v("MY_TAG", "View height is " + this.getHeight());
         }
+    }
+
+    public void drawXAxis(Canvas canvas){
+        Paint p = new Paint();
+        p.setColor(Color.BLACK);
+        p.setTextSize(30);
+            for(int i = 0; i< vals.size(); i++){
+                canvas.drawText(time+"",(i+1)*xIncr+20,this.getHeight(),p);
+                time++;
+            }
     }
 
 }
