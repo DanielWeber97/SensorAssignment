@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -27,17 +28,19 @@ public class LightActivity extends AppCompatActivity implements SensorEventListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_light);
-        plot = findViewById(R.id.plot);
-        run = false;
+        //plot = findViewById(R.id.plot);
+        plot = new CustomView(this, SensorType.LIGHT);
+        plot.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT));
+        LinearLayout l = findViewById(R.id.linearLayout);
+        l.addView(plot);
+
 
         sm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         light = sm.getDefaultSensor(Sensor.TYPE_LIGHT);
         sm.registerListener(this, light,100000 );
-        Log.v("MY_TAG", "max acc value" +light.getMaximumRange());
 
-        Thread thread = new Thread(){
-
-        };
 
 
     }
@@ -48,6 +51,7 @@ public class LightActivity extends AppCompatActivity implements SensorEventListe
         int val = (int) sensorEvent.values[0];
         plot.addPoint(val);
         plot.invalidate();
+        Log.v("MY_TAG", "Light value is " + val);
     }
 
 

@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.NoSuchElementException;
 
 public class CustomView extends View {
 
-    private ArrayList<Float> vals;
+    private ArrayList<Float> vals, means, stdevs;
     private int xIncr;
     private int yVal;
     private SensorType type;
@@ -39,38 +40,70 @@ public class CustomView extends View {
         } else{
             this.type = SensorType.ACCELEROMETER;
         }
+
+
+        vals = new ArrayList<Float>(10);
+        means = new ArrayList<Float>(10);
+        stdevs = new ArrayList<Float>(10);
     }
 
     public CustomView(Context context) {
         super(context);
         vals = new ArrayList<Float>(10);
+        means = new ArrayList<Float>(10);
+        stdevs = new ArrayList<Float>(10);
 
     }
 
     public CustomView(Context context, AttributeSet attrs) {
         super(context, attrs);
         vals = new ArrayList<Float>(10);
+        means = new ArrayList<Float>(10);
+        stdevs = new ArrayList<Float>(10);
+
     }
 
     public CustomView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         vals = new ArrayList<Float>(10);
+        means = new ArrayList<Float>(10);
+        stdevs = new ArrayList<Float>(10);
+
     }
 
     public CustomView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         vals = new ArrayList<Float>(10);
+        means = new ArrayList<Float>(10);
+        stdevs = new ArrayList<Float>(10);
+
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Paint p = new Paint();
-        p.setStyle(Paint.Style.FILL);
-        p.setColor(Color.BLUE);
+        Paint value = new Paint();
+        value.setStyle(Paint.Style.FILL);
+        value.setColor(Color.BLUE);
+        value.setStrokeWidth(10);
+
+        Paint mean = new Paint();
+        mean.setStyle(Paint.Style.FILL);
+        mean.setColor(Color.GREEN);
+        mean.setStrokeWidth(10);
+
+        Paint stdev = new Paint();
+        stdev.setStyle(Paint.Style.FILL);
+        stdev.setColor(Color.RED);
+        stdev.setStrokeWidth(10);
+
+        drawYAxis(canvas);
+
+
+
         xIncr = this.getWidth()/10;
 
-        int max = (int)findMax(vals);
+        int max = (int)findMax(vals,means);
         if(max != 0) {
             yVal = this.getHeight() / max;
         } else{
@@ -79,10 +112,13 @@ public class CustomView extends View {
 
         for(int i = 0; i< vals.size(); i++){
 
-            canvas.drawCircle(i*xIncr+20,vals.get(i)*yVal,11,p);
+            canvas.drawCircle(i*xIncr+20,ycoord(vals.get(i)),11,value);
+            canvas.drawCircle(i*xIncr+20,ycoord(means.get(i)),11,mean);
+            canvas.drawCircle(i*xIncr+20,ycoord(stdevs.get(i)),11,stdev);
+
         }
 
-        drawLines(canvas, p);
+        drawLines(canvas, value,mean,stdev);
     }
 
     public void clear(){
@@ -91,29 +127,110 @@ public class CustomView extends View {
 
     public void addPoint(float f){
         vals.add(f);
+        means.add(mean());
+        stdevs.add(std());
         if(vals.size()>= 11){
             vals.remove(0);
+            means.remove(0);
+            stdevs.remove(0);
         }
     }
 
-    public void drawLines(Canvas canvas, Paint p){
+    public void drawLines(Canvas canvas, Paint value, Paint mean, Paint stdev){
         if(vals.size()>1) {
             for (int i = 0; i < vals.size() - 1; i++) {
-                canvas.drawLine(i * xIncr + 20, vals.get(i) * yVal, (i + 1) * xIncr + 20, vals.get(i + 1) * yVal, p);
+                canvas.drawLine(i * xIncr + 20, ycoord(vals.get(i)), (i + 1) * xIncr + 20, ycoord(vals.get(i+1)), value);
+                canvas.drawLine(i * xIncr + 20, ycoord(means.get(i)), (i + 1) * xIncr + 20, ycoord(means.get(i+1)), mean);
+                canvas.drawLine(i * xIncr + 20, ycoord(stdevs.get(i)), (i + 1) * xIncr + 20, ycoord(stdevs.get(i+1)), stdev);
+
             }
         }
     }
 
+    public Float mean(){
+        Float mean = 0f;
 
-
-    public float findMax(ArrayList<Float> arrayList){
-        float currentMax  = 0;
-        for(int i = 0; i< arrayList.size(); i++){
-            if (arrayList.get(i) > currentMax){
-                currentMax = arrayList.get(i);
+        for(int i = vals.size()-1; i > vals.size()-4; i--){
+            if(i < vals.size()&& i >= 0){
+                mean += vals.get(i);
             }
         }
+        if(vals.size()!= 0) {
+            if (vals.size() >= 3) {
+                return (mean / 3);
+            } else {
+                return mean / vals.size();
+            }
+        }
+        return -1f;
+    }
+
+    public Float std(){
+        double sum = 0;
+        Log.v("MY_TAG", "Calculating Standard Deviation");
+        for(int i = vals.size()-1; i > vals.size()-4; i--){
+            if(i < vals.size()&& i >= 0){
+                sum += Math.pow(vals.get(i)- mean(),2);
+                Log.v("MY_TAG", "value: "+vals.get(i)+"");
+            }
+        }
+
+        if(vals.size()!= 0) {
+            if (vals.size() >= 3) {
+                 sum =(sum / 3);
+            } else {
+                sum = sum / vals.size();
+            }
+        }
+        Log.v("MY_TAG", "mean: " +mean());
+        String s = Math.sqrt(sum) + "";
+        Float ret = Float.parseFloat(s);
+
+        Log.v("MY_TAG", "std dev: " +ret);
+        return ret;
+    }
+
+
+
+    public float findMax(ArrayList<Float> al1,ArrayList<Float> al2){
+        float currentMax  = 0;
+        for(int i = 0; i< al1.size(); i++){
+            if (al1.get(i) > currentMax){
+                currentMax = al1.get(i);
+            }
+        }
+
+        for(int i = 0; i< al2.size(); i++){
+            if (al2.get(i) > currentMax){
+                currentMax = al2.get(i);
+            }
+        }
+
         return currentMax;
+    }
+
+    public Float ycoord(Float f){
+        return this.getHeight()- (f* (this.getHeight()/findMax(vals,means)));
+    }
+
+    public void drawYAxis(Canvas canvas){
+        int max = (int) findMax(vals,means);
+
+        float dy;
+       if(type == SensorType.LIGHT){
+           dy = 30000/10;
+       } else {
+           dy = 78/10;
+       }
+        Paint p = new Paint();
+        p.setColor(Color.BLACK);
+        p.setTextSize(30);
+        for(int i = 1; i <= 10; i++){
+            String text = i * dy +"";
+
+            canvas.drawText(text,0,(float)(10-i)*(this.getHeight()/10),p);
+            Log.v("MY_TAG", "View height is " + this.getHeight());
+        }
     }
 
 }

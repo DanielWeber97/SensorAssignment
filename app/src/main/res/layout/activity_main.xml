@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
 
     <Button
         android:id="@+id/acc"
@@ -13,15 +14,39 @@
         android:layout_height="50dp"
         android:text="Accelerometer"
         android:onClick="toAccelerometer"/>
-
+    <TextView
+        android:id="@+id/accStatus"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Status:"
+        android:gravity="center_horizontal"
+        />
+    <TextView
+        android:id="@+id/accInfo"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Info:"/>
 
     <Button
+
         android:id="@+id/light"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="Light Sensor"
         android:onClick="toLight"/>
-
+    <TextView
+        android:id="@+id/lightStatus"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_horizontal"
+        android:text="Status:"/>
+    <TextView
+        android:id="@+id/lightInfo"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_horizontal"
+        android:text="Info:"/>
 
 
 </LinearLayout>
