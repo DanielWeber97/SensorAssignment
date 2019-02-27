@@ -19,7 +19,7 @@ public class CustomView extends View {
     private int xIncr;
     private int yVal;
     private SensorType type;
-    private int time =0;
+    private double time =0;
 
     public ArrayList<Float> getVals(){
         return vals;
@@ -101,6 +101,8 @@ public class CustomView extends View {
         drawGridlines(canvas);
         drawXAxis(canvas);
         drawYAxis(canvas);
+
+        drawKey(canvas);
 
 
 
@@ -219,17 +221,17 @@ public class CustomView extends View {
     }
 
     public Float ycoord(Float f){
-        Log.v("MY_TAG", "sensor value: "+f + " view height: " + this.getHeight());
+        //Log.v("MY_TAG", "sensor value: "+f + " view height: " + this.getHeight());
       //  return this.getHeight()- (f* (this.getHeight()/findMax(vals,means)));
         int maxVal;
         if(type == SensorType.LIGHT){
             double val =(this.getHeight() - (91* Math.log(f)));
             String s = val + "";
             Float ret = Float.parseFloat(s);
-            if(ret >= this.getHeight()-5){
-                return this.getHeight()-5f;
+            if(ret >= this.getHeight()-35){
+                return this.getHeight()-35f;
             }
-            return Math.min(ret+100,this.getHeight());
+            return Math.min(ret+90,this.getHeight()-35);
         } else{
             maxVal = 78;
         }
@@ -245,10 +247,13 @@ public class CustomView extends View {
        if(type == SensorType.LIGHT){
 
 
-           for(int i = 0; i <= 10; i++){
+           for(int i = 0; i < 9; i++){
                dy = Math.pow(3,i);
                String text = i * dy +"";
-               canvas.drawText(text,0,(float)(10-i)*(this.getHeight()/10),p);
+               if(i ==8){
+                   text = "30000.0";
+               }
+               canvas.drawText(text,5,(float)(10-i)*(this.getHeight()/10)-35,p);
                //   Log.v("MY_TAG", "View height is " + this.getHeight());
            }
 
@@ -272,8 +277,11 @@ public class CustomView extends View {
         p.setColor(Color.BLACK);
         p.setTextSize(30);
             for(int i = 0; i< vals.size(); i++){
-                canvas.drawText(time+"",(i+1)*xIncr+20,this.getHeight()-20,p);
-                time++;
+                canvas.drawText(time+"",(i+1)*xIncr+20,this.getHeight(),p);
+                time+=.0150;
+                time = (double)Math.round(time * 100d) / 100d;
+
+                Log.v("MY_TAG",time+"");
             }
     }
 
@@ -282,9 +290,30 @@ public class CustomView extends View {
         p.setColor(Color.LTGRAY);
         p.setStrokeWidth(7);
         for(int i = 0; i<= vals.size(); i++){
-            canvas.drawLine(xIncr+20,(float)(10-i)*(this.getHeight()/10),this.getWidth(),(float)(10-i)*(this.getHeight()/10) ,p);
-            canvas.drawLine((i+1)*xIncr+20,0,(i+1)*xIncr+20,this.getHeight(),p);
+            canvas.drawLine(xIncr+20,(float)(10-i)*(this.getHeight()/10)-35,this.getWidth(),(float)(10-i)*(this.getHeight()/10)-35 ,p);
+            canvas.drawLine((i+1)*xIncr+20,65,(i+1)*xIncr+20,this.getHeight()-35,p);
         }
+    }
+
+    public void drawKey(Canvas canvas){
+
+        Paint r = new Paint();
+        r.setTextSize(30);
+        r.setColor(Color.RED);
+        canvas.drawText("Standard Dev", 315,30,r);
+        canvas.drawCircle(300,20,5,r);
+
+        Paint b = new Paint();
+        b.setTextSize(30);
+        b.setColor(Color.BLUE);
+        canvas.drawText("Value", 915,30,b);
+        canvas.drawCircle(900,20,5,b);
+
+        Paint g = new Paint();
+        g.setTextSize(30);
+        g.setColor(Color.GREEN);
+        canvas.drawText("Mean", 665,30,g);
+        canvas.drawCircle(650,20,5,g);
     }
 
 }
