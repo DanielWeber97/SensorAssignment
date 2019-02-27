@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -39,7 +40,7 @@ public class LightActivity extends AppCompatActivity implements SensorEventListe
         plot = new CustomView(this, SensorType.LIGHT);
 
         LinearLayout.LayoutParams plotParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1000);
-        plotParams.setMargins(0,0,0,0);
+        plotParams.setMargins(0,0,0,40);
         plot.setLayoutParams(plotParams);
 
         b = new Button(this);
@@ -61,6 +62,7 @@ public class LightActivity extends AppCompatActivity implements SensorEventListe
         l.addView(plot);
         l.addView(img);
         l.addView(b);
+
         run = true;
 
 
@@ -120,33 +122,31 @@ public class LightActivity extends AppCompatActivity implements SensorEventListe
     }
 
     public void changeImage(int val) {
-        if (val <= 400) {
+        if (val <= 50) {
             img.setBackgroundResource(R.drawable.lightbulb);
-        } else if (val <= 1000) {
+        } else if (val <= 100) {
             img.setBackgroundResource(R.drawable.lightbulbone);
 
-        } else if (val <= 2000) {
+        } else if (val <= 200) {
             img.setBackgroundResource(R.drawable.lightbulbtwo);
 
-        } else if (val <= 3000) {
+        } else if (val <= 400) {
             img.setBackgroundResource(R.drawable.lightbulbthree);
 
-        } else if (val <= 4000) {
+        } else if (val <= 500) {
             img.setBackgroundResource(R.drawable.lightbulbfour);
 
-        } else if (val <= 6000) {
+        } else if (val <= 800) {
             img.setBackgroundResource(R.drawable.lightbulbfive);
 
-        } else if (val <= 8000) {
+        } else if (val <= 1300) {
             img.setBackgroundResource(R.drawable.lightbulbsix);
 
-        } else if (val <= 10000) {
+        } else if (val <= 4000) {
             img.setBackgroundResource(R.drawable.lightbulbseven);
 
-        } else if (val <= 30000) {
+        } else
             img.setBackgroundResource(R.drawable.lightbulbeight);
-
-        }
     }
 
 }

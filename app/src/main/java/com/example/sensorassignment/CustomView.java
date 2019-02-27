@@ -179,7 +179,6 @@ public class CustomView extends View {
 
     public Float std(){
         double sum = 0;
-        //Log.v("MY_TAG", "Calculating Standard Deviation");
         for(int i = vals.size()-1; i > vals.size()-4; i--){
             if(i < vals.size()&& i >= 0){
                 sum += Math.pow(vals.get(i)- mean(),2);
@@ -193,11 +192,9 @@ public class CustomView extends View {
                 sum = sum / vals.size();
             }
         }
-      //  Log.v("MY_TAG", "mean: " +mean());
         String s = Math.sqrt(sum) + "";
         Float ret = Float.parseFloat(s);
 
-     //   Log.v("MY_TAG", "std dev: " +ret);
         return ret;
     }
 
@@ -221,8 +218,7 @@ public class CustomView extends View {
     }
 
     public Float ycoord(Float f){
-        //Log.v("MY_TAG", "sensor value: "+f + " view height: " + this.getHeight());
-      //  return this.getHeight()- (f* (this.getHeight()/findMax(vals,means)));
+        Log.v("MY_TAG", "sensor value: "+f );
         int maxVal;
         if(type == SensorType.LIGHT){
             double val =(this.getHeight() - (91* Math.log(f)));
@@ -235,7 +231,7 @@ public class CustomView extends View {
         } else{
             maxVal = 78;
         }
-        return this.getHeight()-((f/maxVal) * this.getHeight());
+        return this.getHeight()-((f/maxVal) * this.getHeight()+35);
     }
 
     public void drawYAxis(Canvas canvas){
@@ -254,7 +250,6 @@ public class CustomView extends View {
                    text = "30000.0";
                }
                canvas.drawText(text,5,(float)(10-i)*(this.getHeight()/10)-35,p);
-               //   Log.v("MY_TAG", "View height is " + this.getHeight());
            }
 
 
@@ -264,8 +259,7 @@ public class CustomView extends View {
 
            for(int i = 1; i <= 10; i++){
                String text = i * dy +"";
-               canvas.drawText(text,0,(float)(10-i)*(this.getHeight()/10),p);
-               //   Log.v("MY_TAG", "View height is " + this.getHeight());
+               canvas.drawText(text,5,(float)(10-i)*(this.getHeight()/10)-30,p);
            }
        }
 
@@ -281,7 +275,6 @@ public class CustomView extends View {
                 time+=.0150;
                 time = (double)Math.round(time * 100d) / 100d;
 
-                Log.v("MY_TAG",time+"");
             }
     }
 
