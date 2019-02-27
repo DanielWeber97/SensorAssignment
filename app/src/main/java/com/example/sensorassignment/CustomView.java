@@ -116,9 +116,9 @@ public class CustomView extends View {
 
         for(int i = 0; i< vals.size(); i++){
 
-            canvas.drawCircle(i*xIncr+20,ycoord(vals.get(i)),11,value);
-            canvas.drawCircle(i*xIncr+20,ycoord(means.get(i)),11,mean);
-            canvas.drawCircle(i*xIncr+20,ycoord(stdevs.get(i)),11,stdev);
+            canvas.drawCircle((i+1)*xIncr+20,ycoord(vals.get(i)),11,value);
+            canvas.drawCircle((i+1)*xIncr+20,ycoord(means.get(i)),11,mean);
+            canvas.drawCircle((i+1)*xIncr+20,ycoord(stdevs.get(i)),11,stdev);
 
         }
 
@@ -150,9 +150,9 @@ public class CustomView extends View {
     public void drawLines(Canvas canvas, Paint value, Paint mean, Paint stdev){
         if(vals.size()>1) {
             for (int i = 0; i < vals.size() - 1; i++) {
-                canvas.drawLine(i * xIncr + 20, ycoord(vals.get(i)), (i + 1) * xIncr + 20, ycoord(vals.get(i+1)), value);
-                canvas.drawLine(i * xIncr + 20, ycoord(means.get(i)), (i + 1) * xIncr + 20, ycoord(means.get(i+1)), mean);
-                canvas.drawLine(i * xIncr + 20, ycoord(stdevs.get(i)), (i + 1) * xIncr + 20, ycoord(stdevs.get(i+1)), stdev);
+                canvas.drawLine((i+1) * xIncr + 20, ycoord(vals.get(i)), (i + 2) * xIncr + 20, ycoord(vals.get(i+1)), value);
+                canvas.drawLine((i+1) * xIncr + 20, ycoord(means.get(i)), (i + 2) * xIncr + 20, ycoord(means.get(i+1)), mean);
+                canvas.drawLine((i+1) * xIncr + 20, ycoord(stdevs.get(i)), (i + 2) * xIncr + 20, ycoord(stdevs.get(i+1)), stdev);
             }
         }
     }
@@ -219,10 +219,17 @@ public class CustomView extends View {
     }
 
     public Float ycoord(Float f){
+        Log.v("MY_TAG", "sensor value: "+f + " view height: " + this.getHeight());
       //  return this.getHeight()- (f* (this.getHeight()/findMax(vals,means)));
         int maxVal;
         if(type == SensorType.LIGHT){
-            maxVal = 30000;
+            double val =(this.getHeight() - (91* Math.log(f)));
+            String s = val + "";
+            Float ret = Float.parseFloat(s);
+            if(ret >= this.getHeight()-5){
+                return this.getHeight()-5f;
+            }
+            return Math.min(ret+100,this.getHeight());
         } else{
             maxVal = 78;
         }
@@ -231,21 +238,33 @@ public class CustomView extends View {
 
     public void drawYAxis(Canvas canvas){
         int max = (int) findMax(vals,means);
-
-        float dy;
-       if(type == SensorType.LIGHT){
-           dy = 30000/10;
-       } else {
-           dy = 78/10;
-       }
         Paint p = new Paint();
         p.setColor(Color.BLACK);
         p.setTextSize(30);
-        for(int i = 1; i <= 10; i++){
-            String text = i * dy +"";
-            canvas.drawText(text,0,(float)(10-i)*(this.getHeight()/10),p);
-         //   Log.v("MY_TAG", "View height is " + this.getHeight());
-        }
+        double dy;
+       if(type == SensorType.LIGHT){
+
+
+           for(int i = 0; i <= 10; i++){
+               dy = Math.pow(3,i);
+               String text = i * dy +"";
+               canvas.drawText(text,0,(float)(10-i)*(this.getHeight()/10),p);
+               //   Log.v("MY_TAG", "View height is " + this.getHeight());
+           }
+
+
+
+       } else {
+           dy = 78/10;
+
+           for(int i = 1; i <= 10; i++){
+               String text = i * dy +"";
+               canvas.drawText(text,0,(float)(10-i)*(this.getHeight()/10),p);
+               //   Log.v("MY_TAG", "View height is " + this.getHeight());
+           }
+       }
+
+
     }
 
     public void drawXAxis(Canvas canvas){
